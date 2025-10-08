@@ -1,0 +1,12 @@
+# IDE
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+
+# Go
+bin/
+dist/
+*.log
+
