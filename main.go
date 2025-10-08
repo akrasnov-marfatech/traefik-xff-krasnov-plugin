@@ -1,4 +1,4 @@
-package traefik_plugin_clean_xff
+package traefik_xff_krasnov_plugin
 
 import (
 	"context"
