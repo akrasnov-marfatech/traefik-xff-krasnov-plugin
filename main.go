@@ -1,6 +1,7 @@
 package traefik_plugin_clean_xff
 
 import (
+	"context"
 	"net/http"
 	"strings"
 )
@@ -24,7 +25,7 @@ type Middleware struct {
 	cfg  *Config
 }
 
-func New(_ interface{}, next http.Handler, cfg *Config, _ string) (http.Handler, error) {
+func New(_ context.Context, next http.Handler, cfg *Config, _ string) (http.Handler, error) {
 	return &Middleware{next: next, cfg: cfg}, nil
 }
 
@@ -39,17 +40,15 @@ func (m *Middleware) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		}
 	} else {
 		if m.cfg.OnlyFirst {
-			// берем первый IP до запятой
 			first := strings.TrimSpace(strings.Split(xff, ",")[0])
 			req.Header.Set("X-Forwarded-For", first)
 		} else {
-			// оставляем весь заголовок как прислал клиент
 			req.Header.Set("X-Forwarded-For", xff)
 		}
 	}
 
-	// Дополнительно дублируем «чистое» значение в отдельный заголовок, чтобы backend мог на него опираться
-	req.Header.Set("X-Client-IP", req.Header.Get("X-Forwarded-For"))
+	// при желании можно дублировать «чистое» значение:
+	// req.Header.Set("X-Client-IP", req.Header.Get("X-Forwarded-For"))
 
 	m.next.ServeHTTP(rw, req)
 }
