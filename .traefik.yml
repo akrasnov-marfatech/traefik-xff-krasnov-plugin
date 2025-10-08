@@ -1,0 +1,8 @@
+type: middleware
+name: clean-xff
+import: github.com/akrasnov-marfatech/traefik-xff-krasnov-plugin
+displayName: Krasnov Clean X-Forwarded-For
+summary: Passes client's X-Forwarded-For as-is (first IP). Optionally empty or delete if missing.
+testData:
+  keepEmpty: true
+  onlyFirst: true
